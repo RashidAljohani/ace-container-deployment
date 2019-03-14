@@ -1,0 +1,43 @@
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata":
+    {
+      "name": "integration-server-service",
+      "namespace": "default",
+      "resourceVersion": "3419311",
+      "labels": { "run": "integration-server-deployment" },
+    },
+  "spec":
+    {
+      "ports":
+        [
+          {
+            "name": "webui",
+            "protocol": "TCP",
+            "port": 7600,
+            "targetPort": 7600,
+            "nodePort": 30175,
+          },
+          {
+            "name": "ace-http",
+            "protocol": "TCP",
+            "port": 7800,
+            "targetPort": 7800,
+            "nodePort": 30932,
+          },
+          {
+            "name": "ace-https",
+            "protocol": "TCP",
+            "port": 7843,
+            "targetPort": 7843,
+            "nodePort": 30986,
+          },
+        ],
+      "selector": { "run": "integration-server-deployment" },
+      "clusterIP": "10.0.171.250",
+      "type": "NodePort",
+      "sessionAffinity": "None",
+      "externalTrafficPolicy": "Cluster",
+    },
+}
