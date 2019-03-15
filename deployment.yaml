@@ -1,74 +1,21 @@
-{
-  "apiVersion": "apps/v1",
-  "kind": "Deployment",
-  "metadata":
-    {
-      "name": "integration-server-deployment",
-      "namespace": "default",
-      "resourceVersion": "7163230",
-      "labels": { "run": "integration-server-deployment" },
-      "annotations": { "deployment.kubernetes.io/revision": "2" },
-    },
-  "spec":
-    {
-      "replicas": 1,
-      "selector": { "matchLabels": { "run": "integration-server-deployment" } },
-      "template":
-        {
-          "metadata": { "labels": { "run": "integration-server-deployment" } },
-          "spec":
-            {
-              "containers":
-                [
-                  {
-                    "name": "integration-server-deployment",
-                    "image": "myapi:1.0",
-                    "ports":
-                      [
-                        {
-                          "name": "webui",
-                          "containerPort": 7600,
-                          "protocol": "TCP",
-                        },
-                        {
-                          "name": "ace-http",
-                          "containerPort": 7800,
-                          "protocol": "TCP",
-                        },
-                        {
-                          "name": "ace-https",
-                          "containerPort": 7843,
-                          "protocol": "TCP",
-                        },
-                      ],
-                    "env":
-                      [
-                        { "name": "LICENSE", "value": "accept" },
-                        {
-                          "name": "ACE_SERVER_NAME",
-                          "value": "myIntegrationServer",
-                        },
-                        { "name": "ACE_ENABLE_METRICS", "value": "true" },
-                      ],
-                    "resources": {},
-                    "terminationMessagePath": "/dev/termination-log",
-                    "terminationMessagePolicy": "File",
-                    "imagePullPolicy": "IfNotPresent",
-                  },
-                ],
-              "restartPolicy": "Always",
-              "terminationGracePeriodSeconds": 30,
-              "dnsPolicy": "ClusterFirst",
-              "securityContext": {},
-              "schedulerName": "default-scheduler",
-            },
-        },
-      "strategy":
-        {
-          "type": "RollingUpdate",
-          "rollingUpdate": { "maxUnavailable": "25%", "maxSurge": "25%" },
-        },
-      "revisionHistoryLimit": 2,
-      "progressDeadlineSeconds": 600,
-    },
-}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: ace
+  name: myintegration-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ace
+    spec:
+      containers:
+        - env:
+            - name: LICENSE
+              value: accept
+            - name: ACE_SERVER_NAME
+              value: ACESERVER
+          name: myintegration-deployment
+          image: us.gcr.io/kubernetes-cluster-234508/myapi:1.0
